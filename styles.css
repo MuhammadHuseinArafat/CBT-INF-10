@@ -153,6 +153,22 @@ button { cursor: pointer; }
 .result-card { margin-top: 16px; padding: 25px; border: 1px solid var(--line); border-radius: 18px; background: white; }
 .result-card h3 { margin: 0 0 8px; font: 700 20px "Space Grotesk", sans-serif; }
 .result-card p { color: var(--muted); line-height: 1.6; }
+.answer-review { margin-top: 16px; }
+.review-head { margin-bottom: 12px; }
+.review-head h2 { margin: 0; font: 700 24px "Space Grotesk", sans-serif; }
+.review-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+.review-list { display: grid; gap: 10px; }
+.review-item { padding: 17px; border: 1px solid var(--line); border-left: 4px solid var(--amber); border-radius: 12px; background: white; }
+.review-item.review-correct { border-left-color: var(--green-600); }
+.review-title { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.review-title span { color: #876100; font-size: 12px; font-weight: 700; }
+.review-correct .review-title span { color: var(--green-700); }
+.review-question { margin: 10px 0; color: var(--ink); font-size: 13px; line-height: 1.55; }
+.review-answer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.review-answer > div { padding: 10px; border-radius: 8px; background: var(--surface); }
+.review-answer b { display: block; margin-bottom: 4px; color: var(--muted); font-size: 11px; }
+.review-answer span { display: block; color: var(--ink); font-size: 12px; line-height: 1.5; }
+.review-explanation { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .score-comparison { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
 .score-item { padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--green-50); }
 .score-item strong { display: block; color: var(--green-800); font: 700 24px "Space Grotesk", sans-serif; }
@@ -165,6 +181,7 @@ button { cursor: pointer; }
 .error { min-height: 16px; margin: -7px 0 14px; color: #b42318; font-size: 12px; }
 @media (max-width: 800px) {
   .login-layout, .dashboard-grid { grid-template-columns: 1fr; }
+  .review-answer { grid-template-columns: 1fr; }
   .login-intro { min-height: 390px; padding: 35px; }
   .login-intro h1 { font-size: 42px; }
   .exam-facts { right: 35px; bottom: 28px; left: 35px; }

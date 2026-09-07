@@ -180,7 +180,7 @@ const app = document.getElementById('app');
 const state = {
   screen: 'login', student: { name: '', className: '' }, mode: null, questions: [], answers: [], doubts: [], current: 0,
   endAt: 0, timerId: null, score: 0, mainScore: null, remedialScore: null, enrichmentScore: null,
-  remedialAttempts: 0, enrichmentTaken: false, finished: false
+  remedialAttempts: 0, remedialCurrentAttempt: 0, enrichmentTaken: false, finished: false
 };
 
 const shuffle = (items) => [...items].sort(() => Math.random() - 0.5);
@@ -197,7 +197,7 @@ function closeSession(confirmClose = false) {
   if (confirmClose && !confirm('Tutup sesi ini? Jawaban yang belum dikumpulkan akan hilang.')) return;
   clearInterval(state.timerId);
   state.screen = 'login'; state.student = { name: '', className: '' }; state.mode = null; state.questions = []; state.answers = []; state.doubts = []; state.current = 0;
-  state.score = 0; state.mainScore = null; state.remedialScore = null; state.enrichmentScore = null; state.remedialAttempts = 0; state.enrichmentTaken = false; state.finished = false;
+  state.score = 0; state.mainScore = null; state.remedialScore = null; state.enrichmentScore = null; state.remedialAttempts = 0; state.remedialCurrentAttempt = 0; state.enrichmentTaken = false; state.finished = false;
   render();
 }
 
@@ -249,6 +249,7 @@ function renderDashboard() {
 }
 
 function startExam(mode) {
+  if (mode === 'remedi') state.remedialCurrentAttempt += 1;
   state.mode = mode; state.questions = shuffle(questionBanks[mode]);
   state.answers = Array(state.questions.length).fill(null); state.doubts = Array(state.questions.length).fill(false); state.current = 0;
   state.endAt = Date.now() + modeTime[mode] * 60 * 1000; state.screen = 'exam'; render();
@@ -286,9 +287,30 @@ function bindExamEvents() {
 }
 function startTimer() { clearInterval(state.timerId); state.timerId = setInterval(() => { const timer = document.getElementById('timer'); if (!timer) return clearInterval(state.timerId); timer.textContent = formatTime(); if (Date.now() >= state.endAt) { clearInterval(state.timerId); saveCurrentAnswer(); submitExam(true); } }, 1000); }
 
+function isQuestionCorrect(question, answer) {
+  if (question.type === 'essay') {
+    const text = String(answer || '').toLowerCase();
+    return (question.keywords || []).every((keyword) => text.includes(keyword.toLowerCase()));
+  }
+  if (question.type === 'pg') return answer === question.answer;
+  return [...(answer || [])].sort().join(',') === [...question.answer].sort().join(',');
+}
+
+function formatAnswer(question, answer) {
+  if (question.type === 'essay') return answer ? esc(answer) : 'Belum dijawab';
+  if (question.type === 'pgk') {
+    return answer?.length ? answer.map((index) => `${String.fromCharCode(65 + index)}. ${esc(question.options[index])}`).join('<br>') : 'Belum dijawab';
+  }
+  return answer === null || answer === undefined ? 'Belum dijawab' : `${String.fromCharCode(65 + answer)}. ${esc(question.options[answer])}`;
+}
+
+function renderAnswerReview() {
+  return `<section class="answer-review"><div class="review-head"><h2>Pembahasan soal</h2><p>Periksa jawaban yang benar dan bagian yang masih perlu dipelajari.</p></div><div class="review-list">${state.questions.map((question, index) => { const answer = state.answers[index]; const correct = isQuestionCorrect(question, answer); const correctAnswer = question.type === 'essay' ? (question.keywords || []).join(', ') : question.type === 'pgk' ? question.answer.map((optionIndex) => `${String.fromCharCode(65 + optionIndex)}. ${esc(question.options[optionIndex])}`).join('<br>') : `${String.fromCharCode(65 + question.answer)}. ${esc(question.options[question.answer])}`; return `<article class="review-item ${correct ? 'review-correct' : 'review-wrong'}"><div class="review-title"><strong>Soal ${index + 1}</strong><span>${correct ? 'Benar' : 'Perlu diperbaiki'}</span></div><p class="review-question">${esc(question.question)}</p><div class="review-answer"><div><b>Jawabanmu</b><span>${formatAnswer(question, answer)}</span></div><div><b>Kunci jawaban</b><span>${correctAnswer}</span></div></div><p class="review-explanation"><b>Pembahasan:</b> ${correct ? 'Jawabanmu sudah tepat.' : `Jawaban yang benar adalah ${correctAnswer}. Pelajari kembali konsep pada soal ini.`}</p></article>`; }).join('')}</div></section>`;
+}
+
 function scoreExam() {
   let earned = 0; let possible = 0;
-  state.questions.forEach((question, index) => { const answer = state.answers[index]; const point = Number(question.point ?? defaultPoints[question.type] ?? 1); possible += point; let correct = false; if (question.type === 'essay') { const text = String(answer || '').toLowerCase(); correct = (question.keywords || []).every((keyword) => text.includes(keyword.toLowerCase())); } else if (question.type === 'pg') correct = answer === question.answer; else { const actual = [...(answer || [])].sort().join(','); const expected = [...question.answer].sort().join(','); correct = actual === expected; } if (correct) earned += point; });
+  state.questions.forEach((question, index) => { const point = Number(question.point ?? defaultPoints[question.type] ?? 1); possible += point; if (isQuestionCorrect(question, state.answers[index])) earned += point; });
   return possible ? Math.round((earned / possible) * 100) : 0;
 }
 function submitExam(auto = false) { clearInterval(state.timerId); state.score = scoreExam(); if (state.mode === 'utama') state.mainScore = state.score; if (state.mode === 'remedi') state.remedialScore = state.score; if (state.mode === 'pengayaan') state.enrichmentScore = state.score; state.screen = 'result'; state.autoSubmitted = auto; render(); }
@@ -300,7 +322,8 @@ function renderResult() {
   else if (isMain && passed) content = `<h3>Selamat, kamu lulus!</h3><p>Nilai utama kamu sudah melewati KKM. Pengayaan tersedia sebagai tantangan tambahan dan bisa memberi bonus nilai.</p><div class="result-actions"><button class="primary-btn" id="nextPath">Ambil pengayaan&nbsp; →</button><button class="ghost-btn" id="finish">Lewati</button></div>`;
   else if (state.mode === 'remedi') content = `<h3>${passed ? 'Remedi berhasil!' : 'Tetap semangat belajar'}</h3><p>${passed ? 'Nilai remedi sudah mencapai KKM dan langsung menjadi nilai akhir yang digunakan.' : 'Nilai remedi masih di bawah KKM. Periksa kembali materi dan gunakan kesempatan yang tersedia.'}</p><div class="score-comparison"><div class="score-item"><strong>${state.mainScore}</strong><span>Nilai ulangan asli</span></div><div class="score-item"><strong>${state.remedialScore}</strong><span>Nilai remedi</span></div><div class="score-item"><strong>${passed ? state.remedialScore : state.mainScore}</strong><span>Nilai akhir sementara</span></div></div><div class="result-actions">${!passed && state.remedialAttempts < 3 ? `<button class="primary-btn" id="nextPath">Coba lagi (${state.remedialAttempts + 1}/3)&nbsp; →</button>` : '<button class="primary-btn" id="finish">Lanjut ke ringkasan&nbsp; →</button>'}</div>`;
   else content = `<h3>${score > 90 ? 'Bonus berhasil didapat!' : 'Pengayaan selesai'}</h3><p>${score > 90 ? 'Nilai pengayaan kamu di atas 90. Satu poin bonus akan ditambahkan ke nilai sumatif utama.' : 'Terima kasih sudah menantang dirimu. Nilai pengayaan tercatat sebagai hasil tambahan.'}</p><div class="result-actions"><button class="primary-btn" id="finish">Lihat ringkasan akhir&nbsp; →</button></div>`;
-  app.innerHTML = `${header(true)}<main class="result-wrap"><section class="result-hero"><div class="result-icon">${passed ? '✓' : '!'}</div><h1>${modeLabel[state.mode]} selesai</h1><p>${state.autoSubmitted ? 'Waktu habis, jawaban telah dikumpulkan otomatis.' : 'Jawabanmu telah berhasil dikumpulkan.'}</p><div class="score">${score}<small> / 100</small></div></section><section class="result-card">${content}</section></main>`;
+  const showReview = state.mode !== 'remedi' || state.remedialCurrentAttempt >= 3;
+  app.innerHTML = `${header(true)}<main class="result-wrap"><section class="result-hero"><div class="result-icon">${passed ? '✓' : '!'}</div><h1>${modeLabel[state.mode]} selesai</h1><p>${state.autoSubmitted ? 'Waktu habis, jawaban telah dikumpulkan otomatis.' : 'Jawabanmu telah berhasil dikumpulkan.'}</p><div class="score">${score}<small> / 100</small></div></section>${showReview ? renderAnswerReview() : ''}<section class="result-card">${content}</section></main>`;
   bindCloseButton();
   document.getElementById('nextPath')?.addEventListener('click', () => { if (state.mode === 'utama') { if (state.score < 82) state.remedialAttempts = 1; else state.enrichmentTaken = true; startExam(state.score < 82 ? 'remedi' : 'pengayaan'); } else if (state.mode === 'remedi') { state.remedialAttempts += 1; startExam('remedi'); } });
   document.getElementById('finish')?.addEventListener('click', () => { state.finished = true; state.screen = 'closing'; render(); });
