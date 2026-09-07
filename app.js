@@ -35,7 +35,7 @@ const questionBanks = {
     { type: 'pg', difficulty: 'sulit', point: 3, question: 'Sebuah sistem antrean loket melakukan urutan operasi berikut pada queue kosong: enqueue(A), enqueue(B), enqueue(C), dequeue(), enqueue(D), dequeue(). Pelanggan yang berada di posisi paling depan queue setelah seluruh operasi ini adalah...', options: ['A', 'B', 'C', 'D'], answer: 2 },
     { type: 'pg', difficulty: 'mudah', point: 1, question: 'Aplikasi pengolah kata menyimpan setiap perubahan teks yang dilakukan pengguna. Saat pengguna menekan "undo" berkali-kali, perubahan yang dibatalkan selalu perubahan paling baru terlebih dahulu. Struktur data yang paling tepat mendasari fitur ini adalah...', options: ['Queue, karena FIFO', 'Stack, karena LIFO', 'Queue, karena LIFO', 'Stack, karena FIFO'], answer: 1 },
     { type: 'pg', difficulty: 'sedang', point: 2, question: 'Sebuah compiler bahasa pemrograman menggunakan stack untuk memeriksa kesesuaian tanda kurung buka dan tutup dalam kode, misalnya ( [ { } ] ). Alasan logis mengapa stack sangat cocok digunakan untuk kasus evaluasi ekspresi ini adalah...', options: ['Kurung penutup harus berpasangan dengan kurung buka terakhir, sesuai prinsip LIFO', 'Setiap tanda kurung harus dieksekusi berdasarkan urutan datangnya, sesuai aturan FIFO', 'Memori stack secara dinamis mampu menyimpan baris kode dalam jumlah tak terbatas', 'Pemrosesan logika secara terbalik terbukti memakan daya komputasi yang lebih rendah'], answer: 0 },
-    { type: 'pg', difficulty: 'sulit', point: 3, question: 'Sebuah kumpulan data dalam jumlah yang sangat besar akan diurutkan menggunakan algoritma Quick Sort. Jika dalam kasus terburuk (worst case) pemilihan pivot terus-menerus menghasilkan partisi yang sangat tidak seimbang, maka kompleksitas waktu algoritma ini akan merosot tajam menjadi...', options: ['$O(\\log n)$', '$O(n)$', '$O(n \\log n)$', '$O(n^2)$'], answer: 3 },
+    { type: 'pg', difficulty: 'sulit', point: 3, question: 'Sebuah kumpulan data dalam jumlah yang sangat besar akan diurutkan menggunakan algoritma Quick Sort. Jika dalam kasus terburuk (worst case) pemilihan pivot terus-menerus menghasilkan partisi yang sangat tidak seimbang, maka kompleksitas waktu algoritma ini akan merosot tajam menjadi...', options: ['O(\\log n)', 'O(n)', 'O(n \\log n)', 'O(n^2)'], answer: 3 },
     { type: 'pg', difficulty: 'sedang', point: 2, question: 'Sebuah call center menggunakan queue untuk mengatur giliran penelepon yang akan dilayani. Suatu hari konfigurasi sistem diam-diam diubah menjadi berprinsip stack tanpa sepengetahuan manajemen. Keluhan yang paling mungkin disampaikan pelanggan adalah...', options: ['Penelepon yang sudah bersabar menunggu paling lama justru akan dilayani paling akhir', 'Seluruh panggilan dari penelepon akan diangkat dan dijawab secara bersamaan oleh bot', 'Tidak ada perubahan mencolok karena pada dasarnya sistem akan menyeimbangkan beban', 'Penelepon yang baru saja terhubung akan langsung terputus koneksinya secara otomatis'], answer: 0 }
   ],
   remedi: [
@@ -88,6 +88,93 @@ const questionBanks = {
     { type: 'pg', difficulty: 'sulit', point: 1, question: 'Jika Linear Search diganti algoritma berkompleksitas $O(n!)$ untuk mencari satu plat dari 100 daftar tersangka, dampak komputasinya adalah...', options: ['Data ditemukan sangat cepat jika berada pada indeks ganjil', 'Server menjadi berlipat ganda lebih cepat karena alokasi silang', 'Server praktis tidak selesai karena $100!$ membutuhkan waktu yang sangat besar', 'Basis data rusak permanen karena beban kerja selalu menyebabkan Stack Overflow'], answer: 2 }
   ]
 };
+
+const utamaDistractors = [
+  'Evaluasi, karena memantau hasil akhirnya.',
+  'Representasi, karena mengubah bentuk data.',
+  'Penarikan kesimpulan secara metode deduktif.',
+  'Mempercepat pembaruan sistem secara otomatis.',
+  'Kelompok dua akan merasa kebingungan.',
+  'Warna teh menjadi lebih pekat.',
+  'Dijalankan pada sistem operasi berbeda.',
+  'Interpolation search, karena sangat akurat.',
+  '23',
+  '5 kali',
+  '1, 2, 4, 7.',
+  '9, 6, 4, 2.',
+  '8, 5, 4, 2, 1.',
+  'Tree search, agar datanya seimbang.',
+  'Mengganti bahasa pemrograman pada aplikasinya.',
+  'Algoritma enkripsi untuk melindungi datanya.',
+  'Kapasitas hardisk server cepat penuh.',
+  'Array dinamis, karena ukurannya fleksibel.',
+  'Linked list, karena saling terhubung.',
+  'Tinta mesin printer cepat habis.',
+  'Kosong',
+  '1, 9, 5.',
+  'Hanya tersisa data angka 2.',
+  'Kosong',
+  'Muncul notifikasi error pada sistem.',
+  'Tidak ada pelanggan yang tersisa.',
+  'Tree, karena memiliki cabang riwayat.',
+  'Mampu mempercepat kinerja sistem operasi.',
+  'O(n!)',
+  'Tagihan pulsa telepon menjadi mahal.'
+];
+questionBanks.utama.forEach((question, index) => question.options.push(utamaDistractors[index]));
+
+const remediDistractors = [
+  'Evaluasi, karena memantau hasil akhir.',
+  'Representasi',
+  'Evaluasi',
+  'Pengenalan pola langkah yang berulang.',
+  'Harus menggunakan instruksi bahasa mesin.',
+  'Algoritma Interpolation Search.',
+  'Jumlah data harus bernilai genap.',
+  'Ditemukan pada pencarian kelima.',
+  'Selalu lebih cepat dan akurat.',
+  'Karena mencari teks lebih sulit.',
+  'Pengacakan urutan (Randomizing).',
+  '8, 5, 3, 2.',
+  'Elemen yang bernilai paling tengah.',
+  'Algoritma Merge Sort.',
+  'Hanya berfungsi untuk data teks.',
+  'Struktur Graph (Jaringan).',
+  'Struktur Tree (Pohon).',
+  'Load In, First Out.',
+  'Pembagian sembako menjadi lebih adil.',
+  'Struktur Linked List.',
+  'Operasi Peek.',
+  'Operasi Front.',
+  'Kosong karena dihapus oleh sistem.',
+  'Antrean dihapus secara otomatis.',
+  'Menghitung jumlah elemen yang tersisa.',
+  'Terjadi malfungsi pada sistem komputer.',
+  'Mengalami kondisi System Crash.',
+  'Menggunakan Graph dinamis.',
+  'Menyisakan elemen A dan B.',
+  'Kapasitas data yang bisa ditampung.'
+];
+questionBanks.remedi.forEach((question, index) => question.options.push(remediDistractors[index]));
+
+const pengayaanDistractors = [
+  'O(n \\log n)',
+  'Semua algoritma akan langsung gagal.',
+  'Sekitar sepuluh ribu langkah pembandingan.',
+  'Karena memakan kuota internet pelanggan.',
+  'Terjadi Queue; semua keluar bersamaan.',
+  'Sistem antrean Stack darurat sementara.',
+  'Garis lurus horizontal mendatar sempurna.',
+  'Sistem algoritma Bubble Sort.',
+  'Dihapus karena dianggap data ganda.',
+  'Server kehabisan kapasitas memori RAM.',
+  'Evaluasi sistem berbasis logika algoritma.',
+  'Membaca ribuan halaman buku telepon.',
+  'Menggunakan Stack karena lebih aman.',
+  'Teknik algoritma pengurutan Merge Sort.',
+  'Kapasitas memori server menjadi penuh.'
+];
+questionBanks.pengayaan.forEach((question, index) => question.options.push(pengayaanDistractors[index]));
 
 const app = document.getElementById('app');
 const state = {
