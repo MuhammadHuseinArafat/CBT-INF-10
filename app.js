@@ -252,7 +252,7 @@ function startExam(mode) {
   if (mode === 'remedi') state.remedialCurrentAttempt += 1;
   state.mode = mode; state.questions = shuffle(questionBanks[mode]);
   state.answers = Array(state.questions.length).fill(null); state.doubts = Array(state.questions.length).fill(false); state.current = 0;
-  state.endAt = Date.now() + modeTime[mode] * 55 * 1000; state.screen = 'exam'; render();
+  state.endAt = Date.now() + modeTime[mode] * 60 * 1000; state.screen = 'exam'; render();
 }
 
 function formatTime() { const remaining = Math.max(0, state.endAt - Date.now()); const seconds = Math.floor(remaining / 1000); return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`; }
