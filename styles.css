@@ -87,6 +87,10 @@ button { cursor: pointer; }
 .dashboard-head p { margin: 0; color: var(--muted); }
 .welcome-label { color: var(--green-700); font-size: 13px; font-weight: 700; }
 .dashboard-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
+.remedial-access { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; padding: 24px 28px; border-left: 4px solid var(--amber); }
+.remedial-access h2 { margin: 8px 0 5px; font: 700 21px "Space Grotesk", sans-serif; }
+.remedial-access p { margin: 0; color: var(--muted); line-height: 1.5; }
+.remedial-access .badge { color: #876100; background: var(--amber-100); }
 .panel { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: 0 5px 20px rgba(6, 95, 70, .04); }
 .main-exam { padding: 28px; }
 .main-exam h2 { margin: 0; font: 700 23px "Space Grotesk", sans-serif; }
@@ -203,6 +207,7 @@ button { cursor: pointer; }
   .dashboard-head { display: block; }
   .dashboard-head h1 { font-size: 31px; }
   .main-exam, .rules { padding: 21px; }
+  .remedial-access { align-items: stretch; flex-direction: column; padding: 21px; }
   .question-grid { grid-template-columns: repeat(6, 1fr); }
   .question-area { width: calc(100% - 34px); }
   .question-text { font-size: 21px; }
