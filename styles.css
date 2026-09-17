@@ -177,7 +177,6 @@ button { cursor: pointer; }
 .close-note { margin-top: 16px; padding: 28px; border: 1px solid var(--line); border-radius: 18px; text-align: center; background: white; }
 .close-note h2 { margin: 0 0 8px; font: 700 25px "Space Grotesk", sans-serif; }
 .close-note p { margin: 0; color: var(--muted); }
-
 .error { min-height: 16px; margin: -7px 0 14px; color: #b42318; font-size: 12px; }
 @media (max-width: 800px) {
   .login-layout, .dashboard-grid { grid-template-columns: 1fr; }
