@@ -186,7 +186,7 @@ const state = {
 const shuffle = (items) => [...items].sort(() => Math.random() - 0.5);
 const esc = (value) => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
 const modeLabel = { utama: 'Soal Utama', remedi: 'Soal Remedi', pengayaan: 'Soal Pengayaan' };
-const modeTime = { utama: 60, remedi: 30, pengayaan: 30 };
+const modeTime = { utama: 55, remedi: 30, pengayaan: 30 };
 const defaultPoints = { pg: 1, pgk: 2, essay: 3 };
 
 function header(session = false, hideTeacher = false) {
@@ -209,7 +209,7 @@ function bindCloseButton(confirmClose = false, closeWindow = false) {
 }
 
 function renderLogin() {
-  app.innerHTML = `${header()}<main class="page login-page"><section class="login-layout"><div class="login-intro"><div class="eyebrow">Ulangan Sumatif • 2026</div><h1>Berpikir komputasional, dimulai dari sini.</h1><p>Mulailah dengan bacaan doa agar ujianmu berkah. Siapkan fokus terbaikmu, baca setiap soal dengan teliti, lalu kerjakan dengan tenang sampai selesai.</p><div class="exam-facts"><div><strong>${questionBanks.utama.length}</strong><span>Soal utama</span></div><div><strong>60′</strong><span>Durasi</span></div><div><strong>82</strong><span>KKM</span></div></div></div><form class="login-form" id="loginForm"><h2>Selamat datang</h2><p>Isi identitas untuk masuk ke ruang ujian.</p><label class="field">Nama lengkap<input name="name" required autocomplete="name" placeholder="Contoh: Aulia Putri" /></label><label class="field">Kelas<input name="className" required placeholder="Contoh: X-1" /></label><div class="error" id="loginError"></div><button class="primary-btn full" type="submit">Masuk ke ruang ujian&nbsp; →</button></form></section></main>`;
+  app.innerHTML = `${header()}<main class="page login-page"><section class="login-layout"><div class="login-intro"><div class="eyebrow">Ulangan Sumatif • 2026</div><h1>Berpikir komputasional, dimulai dari sini.</h1><p>Mulailah dengan bacaan doa agar ujianmu berkah. Siapkan fokus terbaikmu, baca setiap soal dengan teliti, lalu kerjakan dengan tenang sampai selesai.</p><div class="exam-facts"><div><strong>${questionBanks.utama.length}</strong><span>Soal utama</span></div><div><strong>55′</strong><span>Durasi</span></div><div><strong>82</strong><span>KKM</span></div></div></div><form class="login-form" id="loginForm"><h2>Selamat datang</h2><p>Isi identitas untuk masuk ke ruang ujian.</p><label class="field">Nama lengkap<input name="name" required autocomplete="name" placeholder="Contoh: Aulia Putri" /></label><label class="field">Kelas<input name="className" required placeholder="Contoh: X-1" /></label><div class="error" id="loginError"></div><button class="primary-btn full" type="submit">Masuk ke ruang ujian&nbsp; →</button></form></section></main>`;
   bindCloseButton(false, true);
   document.getElementById('teacherLogin').addEventListener('click', () => { state.screen = 'teacherLogin'; render(); });
   document.getElementById('loginForm').addEventListener('submit', (event) => {
@@ -243,7 +243,7 @@ function renderTeacher() {
 }
 
 function renderDashboard() {
-  app.innerHTML = `${header(true)}<main class="page"><div class="dashboard-head"><div><div class="welcome-label">Halo, ${esc(state.student.name)} 👋</div><h1>Siap untuk tantangan hari ini?</h1><p>Kelas ${esc(state.student.className)} · Ulangan Sumatif Informatika</p></div></div><div class="dashboard-grid"><section class="panel main-exam"><span class="badge">Wajib dikerjakan</span><h2>Ujian Utama</h2><p>Uji pemahamanmu tentang konsep dasar Informatika, algoritma, jaringan, dan keamanan digital.</p><div class="exam-summary"><div><strong>${questionBanks.utama.length}</strong><span>Contoh soal</span></div><div><strong>60 menit</strong><span>Waktu tersedia</span></div><div><strong>82</strong><span>Nilai KKM</span></div></div><button class="primary-btn" id="startMain">Mulai kerjakan soal&nbsp; →</button></section><aside class="panel rules"><h3>Petunjuk singkat</h3><div class="rule"><b>01</b><span>Pilih jawaban paling tepat. Soal kompleks dapat memiliki lebih dari satu jawaban.</span></div><div class="rule"><b>02</b><span>Kamu bebas berpindah nomor melalui panel navigasi di sebelah kiri.</span></div><div class="rule"><b>03</b><span>Gunakan tanda <strong>Ragu-ragu</strong> agar soal mudah ditemukan kembali.</span></div><div class="rule"><b>04</b><span>Nilai akan muncul otomatis setelah kamu mengumpulkan jawaban.</span></div></aside></div></main>`;
+  app.innerHTML = `${header(true)}<main class="page"><div class="dashboard-head"><div><div class="welcome-label">Halo, ${esc(state.student.name)} 👋</div><h1>Siap untuk tantangan hari ini?</h1><p>Kelas ${esc(state.student.className)} · Ulangan Sumatif Informatika</p></div></div><div class="dashboard-grid"><section class="panel main-exam"><span class="badge">Wajib dikerjakan</span><h2>Ujian Utama</h2><p>Uji pemahamanmu tentang konsep dasar Informatika, algoritma, jaringan, dan keamanan digital.</p><div class="exam-summary"><div><strong>${questionBanks.utama.length}</strong><span>Soal</span></div><div><strong>55 menit</strong><span>Waktu tersedia</span></div><div><strong>82</strong><span>Nilai KKM</span></div></div><button class="primary-btn" id="startMain">Mulai kerjakan soal&nbsp; →</button></section><aside class="panel rules"><h3>Petunjuk singkat</h3><div class="rule"><b>01</b><span>Pilih jawaban paling tepat. Soal kompleks dapat memiliki lebih dari satu jawaban.</span></div><div class="rule"><b>02</b><span>Kamu bebas berpindah nomor melalui panel navigasi di sebelah kiri.</span></div><div class="rule"><b>03</b><span>Gunakan tanda <strong>Ragu-ragu</strong> agar soal mudah ditemukan kembali.</span></div><div class="rule"><b>04</b><span>Nilai akan muncul otomatis setelah kamu mengumpulkan jawaban.</span></div></aside></div></main>`;
   bindCloseButton();
   document.getElementById('startMain').addEventListener('click', () => startExam('utama'));
 }
@@ -252,7 +252,7 @@ function startExam(mode) {
   if (mode === 'remedi') state.remedialCurrentAttempt += 1;
   state.mode = mode; state.questions = shuffle(questionBanks[mode]);
   state.answers = Array(state.questions.length).fill(null); state.doubts = Array(state.questions.length).fill(false); state.current = 0;
-  state.endAt = Date.now() + modeTime[mode] * 60 * 1000; state.screen = 'exam'; render();
+  state.endAt = Date.now() + modeTime[mode] * 55 * 1000; state.screen = 'exam'; render();
 }
 
 function formatTime() { const remaining = Math.max(0, state.endAt - Date.now()); const seconds = Math.floor(remaining / 1000); return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`; }
